@@ -1,4 +1,4 @@
-﻿-- Register some SharedMedia goodies.
+-- Register some SharedMedia goodies.
 
 local ShareFonts = LibStub:GetLibrary("LibSharedMedia-3.0")
 
