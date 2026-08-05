@@ -88,13 +88,21 @@ hooksecurefunc("CompactUnitFrame_UpdateAll", function(frame)
     --------------------------------------------------------
     -- 5. 数值字体（按你要求：完全替换成 healthBar.text）
     --------------------------------------------------------
-    if frame.healthBar  then
-        frame.healthBar.text:ClearAllPoints()
-        frame.healthBar.text:SetFont("Fonts\\ledfont.TTF", 16, "THICKOUTLINE")
-        frame.healthBar.text:SetPoint("TOP", 0, -18)
-        frame.healthBar.text:SetTextColor(0, 1, 0)
-        frame.healthBar.text:SetShadowOffset(0, -1)
-        frame.healthBar.text:SetShadowColor(0, 0, 0, 1)
+ --[[    if frame.statusText then
+        frame.statusText:ClearAllPoints()
+        frame.statusText:SetFont("Fonts\\ledfont.TTF", 16, "THICKOUTLINE")
+        frame.statusText:SetPoint("TOP", frame, "TOP", 0, -18)
+        frame.statusText:SetTextColor(0, 1, 0)
+        frame.statusText:SetShadowOffset(0, -1)
+        frame.statusText:SetShadowColor(0, 0, 0, 1)
     end
-end)
-
+]]--
+    if frame.hbcStatusText then
+        frame.hbcStatusText:ClearAllPoints()
+        frame.hbcStatusText:SetFont("Fonts\\ledfont.TTF", 16, "THICKOUTLINE")
+        frame.hbcStatusText:SetPoint("TOP", frame, "TOP", 0, -15)
+        frame.hbcStatusText:SetTextColor(0, 1, 0)
+        frame.hbcStatusText:SetShadowOffset(0, -1)
+        frame.hbcStatusText:SetShadowColor(0, 0, 0, 1)
+    end
+	end)
