@@ -7,4 +7,4 @@ Zzzz.lua
 Emote.lua
 highlight.lua
 RaidUIFont.lua
-RaidFrameRightClickFix.lua
+RaidFrame.lua

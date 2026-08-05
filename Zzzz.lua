@@ -45,31 +45,6 @@ hooksecurefunc("WhoList_Update", function()
 end)
 
 
-hooksecurefunc("CompactUnitFrame_UpdateAll", function(frame)
-        if frame:IsForbidden() or not frame:IsVisible() or not frame.buffFrames or not DefaultCompactUnitFrameSetupOptions.displayPowerBar then return end
-
-        local barHeight = UnitGroupRolesAssigned(frame.displayedUnit) == "HEALER" and 4 or 2.5
-
-        frame.healthBar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1 + barHeight)
-        frame.buffFrames[1]:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -3, CUF_AURA_BOTTOM_OFFSET + barHeight)
-        frame.debuffFrames[1]:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 3, CUF_AURA_BOTTOM_OFFSET + barHeight)
-
-        if frame.name then
-            frame.name:ClearAllPoints()
-            frame.name:SetFont("Fonts\\FZLTLC.ttf", 12, "THICK")
-            frame.name:SetPoint("TOP", 0, 0)
-            frame.name:SetShadowOffset(-1, -1)
-            frame.name:SetShadowColor(0, 0, 0, 1)
-        end
-        if frame.statusText then
-            frame.statusText:ClearAllPoints()
-            frame.statusText:SetFont("Fonts\\ledfont.TTF", 16, "THICK")
-            frame.statusText:SetPoint("TOP", 0, -18)
-            frame.statusText:SetTextColor(0, 1, 0)
-            frame.statusText:SetShadowOffset(0, -1)
-            frame.statusText:SetShadowColor(0, 0, 0, 1)
-        end
-end)
 
 
 local xframe = CreateFrame("Frame")
