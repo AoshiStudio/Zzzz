@@ -16,6 +16,9 @@ addon:RegisterEvent("RAID_ROSTER_UPDATE")
 -- 缩放应用
 ------------------------------------------------------------
 local function ApplyRaidFrameScale()
+    -- 如果正在战斗中，直接跳过不执行，防止被暴雪安全机制拦截
+    if InCombatLockdown() then return end
+
     if CompactRaidFrameContainer then
         CompactRaidFrameContainer:SetScale(RAID_FRAME_SCALE)
     end
@@ -23,7 +26,6 @@ local function ApplyRaidFrameScale()
         CompactPartyFrame:SetScale(RAID_FRAME_SCALE)
     end
 end
-
 ------------------------------------------------------------
 -- 团队标记图标：创建与更新
 ------------------------------------------------------------
