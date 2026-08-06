@@ -1,11 +1,19 @@
 -- ==========================================
--- 暴雪团队/小队框架综合增强与缩放脚本（最终正确版）
+-- 暴雪团队/小队框架综合增强与缩放脚本（含团队标记修复）
 -- ==========================================
 
-local RAID_FRAME_SCALE = 0.7  -- 修改缩放比例
+local RAID_FRAME_SCALE = 0.75  -- 修改缩放比例
 
 ------------------------------------------------------------
--- 正确缩放：直接缩放实际框体（不会报错，不依赖 EditMode）
+-- 主监听框体（统一调度所有事件）
+------------------------------------------------------------
+local addon = CreateFrame("Frame")
+addon:RegisterEvent("PLAYER_ENTERING_WORLD")
+addon:RegisterEvent("GROUP_ROSTER_UPDATE")
+addon:RegisterEvent("RAID_ROSTER_UPDATE")
+
+------------------------------------------------------------
+-- 缩放应用
 ------------------------------------------------------------
 local function ApplyRaidFrameScale()
     if CompactRaidFrameContainer then
@@ -17,14 +25,33 @@ local function ApplyRaidFrameScale()
 end
 
 ------------------------------------------------------------
--- 事件监听：进入世界、队伍变化、团队变化时应用缩放
+-- 团队标记图标：创建与更新
 ------------------------------------------------------------
-local addonFrame = CreateFrame("Frame")
-addonFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-addonFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
-addonFrame:RegisterEvent("RAID_ROSTER_UPDATE")
+local function AddRaidIconToFrame(frame)
+    if frame.myRaidIcon then return end
+    local icon = frame:CreateTexture(nil, "OVERLAY", nil, 7)
+    icon:SetSize(10, 10)
+    icon:SetPoint("LEFT", frame, "LEFT", -2, 6)
+    icon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons")
+    frame.myRaidIcon = icon
+end
 
-addonFrame:SetScript("OnEvent", function()
+local function UpdateIconOnFrame(frame)
+    if not frame.unit then return end
+    AddRaidIconToFrame(frame)
+    local index = GetRaidTargetIndex(frame.unit)
+    if index then
+        SetRaidTargetIconTexture(frame.myRaidIcon, index)
+        frame.myRaidIcon:Show()
+    else
+        frame.myRaidIcon:Hide()
+    end
+end
+
+------------------------------------------------------------
+-- 统一事件分发
+------------------------------------------------------------
+addon:SetScript("OnEvent", function(self, event, ...)
     ApplyRaidFrameScale()
 end)
 
@@ -60,22 +87,7 @@ hooksecurefunc("CompactUnitFrame_UpdateAll", function(frame)
     end
 
     --------------------------------------------------------
-    -- 3. 团队标记（正确版）
-    --------------------------------------------------------
-    if frame.raidTargetIcon and frame.displayedUnit then
-        CompactUnitFrame_UpdateRaidTarget(frame)
-
-        local index = GetRaidTargetIndex(frame.displayedUnit)
-        if index then
-            frame.raidTargetIcon:SetSize(12, 12)
-            frame.raidTargetIcon:ClearAllPoints()
-            frame.raidTargetIcon:SetPoint("LEFT", frame, "LEFT", 2, 0)
-            frame.raidTargetIcon:SetDrawLayer("OVERLAY", 7)
-        end
-    end
-
-    --------------------------------------------------------
-    -- 4. 名字字体调整
+    -- 3. 名字字体调整
     --------------------------------------------------------
     if frame.name then
         frame.name:ClearAllPoints()
@@ -86,7 +98,7 @@ hooksecurefunc("CompactUnitFrame_UpdateAll", function(frame)
     end
 
     --------------------------------------------------------
-    -- 5. 数值字体（按你要求：完全替换成 healthBar.text）
+    -- 4. 数值字体（按你要求：完全替换成 healthBar.text）
     --------------------------------------------------------
  --[[    if frame.statusText then
         frame.statusText:ClearAllPoints()
@@ -105,4 +117,9 @@ hooksecurefunc("CompactUnitFrame_UpdateAll", function(frame)
         frame.hbcStatusText:SetShadowOffset(0, -1)
         frame.hbcStatusText:SetShadowColor(0, 0, 0, 1)
     end
+
+    --------------------------------------------------------
+    -- 5. 团队标记图标更新
+    --------------------------------------------------------
+    UpdateIconOnFrame(frame)
 	end)
