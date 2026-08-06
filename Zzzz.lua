@@ -23,7 +23,6 @@ local FONTS_TO_REGISTER = {
     { "方正北魏楷书",   [[Fonts\FZBWJW.TTF]] },
     { "液晶数字2",      [[Fonts\LCD.TTF]] },
     { "液晶数字",       [[Fonts\ledfont.ttf]] },
-    { "汉仪特细等线简", [[Fonts\hyg6gj.TTF]] },
     { "方正兰亭黑长",   [[Fonts\FZLTLC.TTF]] },
 }
 
